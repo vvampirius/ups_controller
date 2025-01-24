@@ -1,0 +1,6 @@
+listen: :8086
+port:
+  name: /dev/serial0
+  baud: 115200
+db_url: postgres://***:***@***/***?sslmode=require
+bot_api_url: http://***

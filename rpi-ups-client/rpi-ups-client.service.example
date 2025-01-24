@@ -1,0 +1,11 @@
+[Unit]
+Description=rpi-ups-client
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/rpi-ups-client -c /srv/rpi-ups-client.yml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
