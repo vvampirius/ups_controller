@@ -44,8 +44,40 @@ Shutdown voltage (1000): 10V
 
 Shutdown voltage (1050): 10.5V
 
-## Linux Raspberry Pi app
+## Linux Raspberry Pi companion app
 
-TBD
+Add to /boot/config.txt:
+
+    dtoverlay=gpio-shutdown,gpio_pin=23,active_low=0,gpio_pull=down
+    dtoverlay=gpio-poweroff,gpiopin=17
+    enable_uart=1
+
+Remove `console=serial0,115200` from /boot/cmdline.txt (if exists)
+
+Build and copy `rpi-ups-client` to /usr/local/sbin/
+
+Place /srv/rpi-ups-client.yml from [example](https://github.com/vvampirius/ups_controller/blob/master/rpi-ups-client/config.yml.example)
+
+/lib/systemd/system/rpi-ups-client.service:
+
+    [Unit]
+    Description=rpi-ups-client
+    After=network.target
+
+    [Service]
+    Type=simple
+    ExecStart=/usr/local/sbin/rpi-ups-client -c /srv/rpi-ups-client.yml
+    Restart=always
+
+    [Install]
+    WantedBy=multi-user.target
+
+Enable SystemdD service:
+
+    systemctl daemon-reload
+    systemctl enable rpi-ups-client
+    systemctl start rpi-ups-client
+
+
 
 [Blog Post](https://wampi.re/village_ups)
